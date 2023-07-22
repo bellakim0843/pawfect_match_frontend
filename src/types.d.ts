@@ -13,6 +13,7 @@ export interface ISitterList {
   price: number;
   rating: number;
   is_account: boolean;
+  category: number;
 }
 
 export interface ISitterAccount {
@@ -57,4 +58,9 @@ export interface IUser {
   date_joined: string;
   avatar: string;
   is_sitter: boolean;
+}
+
+export interface IService {
+  service_name: string;
+  description: string;
 }

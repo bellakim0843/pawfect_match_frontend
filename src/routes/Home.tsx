@@ -27,14 +27,7 @@ export default function Home() {
       marginRight={10}
       mt={10}
       columnGap={5}
-      rowGap={10}
-      templateColumns={{
-        sm: "1fr",
-        md: "repeat(2, 1fr)",
-        lg: "repeat(3, 1fr)",
-        xl: "repeat(4, 1fr)",
-        "2xl": "repeat(5, 1fr)",
-      }}
+      templateColumns="repeat(auto-fit, minmax(250px, 1fr))"
     >
       {isLoading ? (
         <>

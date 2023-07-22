@@ -48,11 +48,14 @@ export default function Sitter({
           overflow={"hidden"}
           mb={3}
           rounded="2xl"
+          aspectRatio={1}
+          maxHeight={"100%"}
+          maxWidth={"100%"}
         >
           {imageUrl ? (
-            <Image minH="280" src={imageUrl} />
+            <Image objectFit="cover" w="100%" h="100%" src={imageUrl} />
           ) : (
-            <Box minH="280" aspectRatio={1} p={10} bg="gray.400"></Box>
+            <Box aspectRatio={1} p={10} bg="gray.400"></Box>
           )}
           <Button
             variant={"unstyled"}
@@ -71,7 +74,13 @@ export default function Sitter({
         </Box>
         <Box>
           <Grid gap={2} templateColumns={"4.5fr 1fr"}>
-            <Text display={"block"} as="b" noOfLines={1} fontSize={"md"}>
+            <Text
+              display={"block"}
+              as="b"
+              noOfLines={1}
+              fontSize={"20px"}
+              paddingLeft={1}
+            >
               {name}
             </Text>
             <HStack
@@ -85,11 +94,11 @@ export default function Sitter({
               <Text>{rating}</Text>
             </HStack>
           </Grid>
-          <Text fontSize={"sm"} color={gray}>
+          <Text fontSize={"md"} color={gray} paddingLeft={1} marginBottom={1}>
             {city}/{country}
           </Text>
         </Box>
-        <Text fontSize={"sm"} color={gray}>
+        <Text marginBottom={10} fontSize={"sm"} color={gray} paddingLeft={1}>
           <Text as="b">€{price}</Text>/ day
         </Text>
       </VStack>
