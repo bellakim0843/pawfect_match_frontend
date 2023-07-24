@@ -10,8 +10,10 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
+import { getSitter } from "../api";
+import SitterDetail from "../routes/SitterDetail";
 
-interface SitterProps {
+export interface SitterProps {
   imageUrl: string;
   name: string;
   rating: number;
@@ -20,6 +22,7 @@ interface SitterProps {
   price: number;
   pk: number;
   is_account: boolean;
+  category: number;
 }
 
 export default function Sitter({
@@ -31,13 +34,16 @@ export default function Sitter({
   country,
   price,
   is_account,
+  category,
 }: SitterProps) {
   const gray = useColorModeValue("gray.600", "gray.300");
   const navigate = useNavigate();
+
   const onCameraClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
     event.preventDefault();
     navigate(`/sitters/${pk}/photos`);
   };
+
   return (
     <Link to={`/sitters/${pk}`}>
       {" "}
