@@ -37,7 +37,6 @@ export default function Service() {
             <Text>
               {sitterData?.services && sitterData?.services[0] ? (
                 <HStack paddingTop={5} paddingBottom={5}>
-                  <FaPersonWalking size={40} />
                   {sitterData?.services?.[0] && (
                     <VStack alignItems="flex-start" marginLeft={5}>
                       <Text fontSize={"20px"} fontWeight={600}>
@@ -56,7 +55,6 @@ export default function Service() {
             <Text>
               {sitterData?.services && sitterData?.services[1] ? (
                 <HStack paddingBottom={5}>
-                  <FaBath size={40} />
                   {sitterData?.services?.[1] && (
                     <VStack alignItems="flex-start" marginLeft={5}>
                       <Text fontSize={"20px"} fontWeight={600}>
@@ -75,9 +73,8 @@ export default function Service() {
           {/* Display service[2] */}
           <Box marginBottom={2}>
             <Text>
-              {sitterData?.services && sitterData?.services[2] ? (
+              {sitterData?.services && sitterData?.services[0].service_name ? (
                 <HStack paddingBottom={5}>
-                  <FaScissors size={40} />
                   {sitterData?.services?.[2] && (
                     <VStack alignItems="flex-start" marginLeft={5}>
                       <Text fontSize={"20px"} fontWeight={600}>
@@ -98,7 +95,6 @@ export default function Service() {
             <Text>
               {sitterData?.services && sitterData?.services[3] ? (
                 <HStack paddingBottom={5}>
-                  <FaRegHospital size={40} />
                   {sitterData?.services?.[3] && (
                     <VStack alignItems="flex-start" marginLeft={5}>
                       <Text fontSize={"20px"} fontWeight={600}>
@@ -117,7 +113,6 @@ export default function Service() {
             <Text>
               {sitterData?.services && sitterData?.services[4] ? (
                 <HStack paddingBottom={5}>
-                  <FaRegThumbsUp size={40} />
                   {sitterData?.services?.[4] && (
                     <VStack alignItems="flex-start" marginLeft={5}>
                       <Text fontSize={"20px"} fontWeight={600}>
@@ -136,7 +131,6 @@ export default function Service() {
             <Text>
               {sitterData?.services && sitterData?.services[5] ? (
                 <HStack paddingBottom={5}>
-                  <FaCartPlus size={40} />
                   {sitterData?.services?.[5] && (
                     <VStack alignItems="flex-start" marginLeft={5}>
                       <Text fontSize={"20px"} fontWeight={600}>

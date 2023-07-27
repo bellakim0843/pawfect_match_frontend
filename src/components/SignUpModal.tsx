@@ -11,9 +11,23 @@ import {
   ModalHeader,
   ModalOverlay,
   VStack,
+  Select,
+  useToast,
+  FormControl,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { FaUserNinja, FaLock, FaEnvelope, FaUserSecret } from "react-icons/fa";
 import SocialLogin from "./SocialLogin";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { SignUp } from "../api";
+
+interface IForm {
+  name: string;
+  email: string;
+  username: string;
+  password: string;
+}
 
 interface SignUpModalProps {
   isOpen: boolean;
@@ -21,13 +35,39 @@ interface SignUpModalProps {
 }
 
 export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
+  const { register, handleSubmit, reset, formState } = useForm<IForm>();
+  const toast = useToast();
+  const queryClient = useQueryClient();
+
+  const { errors } = formState;
+
+  const mutation = useMutation(SignUp, {
+    onSuccess: () => {
+      toast({ title: "Welcome!", status: "success" });
+      onClose();
+      queryClient.refetchQueries(["me"]);
+      reset();
+    },
+    onError: () => {
+      reset();
+    },
+  });
+
+  const onSubmit = ({ username, password, name, email }: IForm) => {
+    mutation.mutate({
+      username,
+      email,
+      name,
+      password,
+    });
+  };
   return (
     <Modal onClose={onClose} isOpen={isOpen}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Sign up</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody as="form" onSubmit={handleSubmit(onSubmit)}>
           <VStack>
             <InputGroup>
               <InputLeftElement
@@ -37,7 +77,11 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                   </Box>
                 }
               />
-              <Input variant={"filled"} placeholder="Name" />
+              <Input
+                {...register("name", { required: true })}
+                placeholder="Name"
+                variant="filled"
+              />
             </InputGroup>
             <InputGroup>
               <InputLeftElement
@@ -47,8 +91,21 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                   </Box>
                 }
               />
-              <Input variant={"filled"} placeholder="Email" />
+              <Input
+                {...register("email", {
+                  required: "Email is required", // Add required validation message
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email address", // Add validation message for pattern
+                  },
+                })}
+                placeholder="Email"
+                variant="filled"
+              />
             </InputGroup>
+            <FormControl isInvalid={!!errors.email}>
+              <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
+            </FormControl>
             <InputGroup>
               <InputLeftElement
                 children={
@@ -57,7 +114,11 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                   </Box>
                 }
               />
-              <Input variant={"filled"} placeholder="Username" />
+              <Input
+                {...register("username", { required: true })}
+                placeholder="Account ID"
+                variant="filled"
+              />
             </InputGroup>
             <InputGroup>
               <InputLeftElement
@@ -67,11 +128,22 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                   </Box>
                 }
               />
-              <Input variant={"filled"} placeholder="Password" />
+              <Input
+                {...register("password", { required: true })}
+                placeholder="password"
+                variant="filled"
+                type="password"
+              />
             </InputGroup>
           </VStack>
-          <Button mt={4} colorScheme={"red"} w="100%">
-            Log in
+          <Button
+            isLoading={mutation.isLoading}
+            w="full"
+            colorScheme="red"
+            mt={4}
+            type="submit"
+          >
+            Sign in
           </Button>
           <SocialLogin />
         </ModalBody>

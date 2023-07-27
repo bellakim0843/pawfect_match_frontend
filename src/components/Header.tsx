@@ -84,6 +84,9 @@ export default function Header() {
         md: "row",
       }}
       borderBottomWidth={1}
+      style={{
+        boxShadow: "0px 1px 4px rgba(0, 0, 0, 0.2)", // Add the shadow effect
+      }}
     >
       <Box px={10} color={logoColor}>
         <Link to={"/"}>

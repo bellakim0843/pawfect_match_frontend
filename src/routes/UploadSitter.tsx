@@ -75,7 +75,6 @@ export default function UploadSitter() {
 
   return (
     <ProtectedPage>
-      <h1>upload roommmmmmm</h1>
       <Box
         pb={40}
         mt={10}
@@ -99,7 +98,7 @@ export default function UploadSitter() {
                 required
                 type="text"
               />
-              <FormHelperText>Write the name of your room.</FormHelperText>
+              <FormHelperText>Write the user's name.</FormHelperText>
             </FormControl>
             <FormControl>
               <FormLabel>Country</FormLabel>

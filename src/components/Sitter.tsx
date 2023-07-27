@@ -13,7 +13,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { getSitter } from "../api";
 import SitterDetail from "../routes/SitterDetail";
 
-export interface SitterProps {
+interface SitterProps {
   imageUrl: string;
   name: string;
   rating: number;
@@ -23,6 +23,7 @@ export interface SitterProps {
   pk: number;
   is_account: boolean;
   category: number;
+  is_liked: boolean;
 }
 
 export default function Sitter({
@@ -35,6 +36,7 @@ export default function Sitter({
   price,
   is_account,
   category,
+  is_liked,
 }: SitterProps) {
   const gray = useColorModeValue("gray.600", "gray.300");
   const navigate = useNavigate();
@@ -63,20 +65,30 @@ export default function Sitter({
           ) : (
             <Box aspectRatio={1} p={10} bg="gray.400"></Box>
           )}
-          <Button
-            variant={"unstyled"}
-            position={"absolute"}
-            top={0}
-            right={0}
-            onClick={onCameraClick}
-            color={"white"}
-          >
-            {is_account ? (
+          {is_account ? (
+            <Button
+              variant={"unstyled"}
+              position={"absolute"}
+              top={0}
+              right={0}
+              onClick={onCameraClick}
+              color={"white"}
+            >
               <FaCamera size={"20px"} />
-            ) : (
+            </Button>
+          ) : (
+            <Box
+              as={Button}
+              variant={"unstyled"}
+              position={"absolute"}
+              top={0}
+              right={0}
+              color={"white"}
+              _hover={{ color: "red" }} // Add hover styles to the Box component
+            >
               <FaRegHeart size={"20px"} />
-            )}
-          </Button>
+            </Box>
+          )}
         </Box>
         <Box>
           <Grid gap={2} templateColumns={"4.5fr 1fr"}>

@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { checkBooking, getSitter, getSitterReviews } from "../api";
+import "../calendar.css";
 import { IReview, ISitterDetail, ICategory } from "../types";
 import Service from "../components/Service";
 import {
@@ -15,6 +15,9 @@ import {
   HStack,
   Heading,
   Image,
+  InputGroup,
+  InputLeftAddon,
+  Select,
   Skeleton,
   Text,
   VStack,
@@ -23,20 +26,37 @@ import {
   ModalContent,
   ModalCloseButton,
   ModalBody,
+  useToast,
 } from "@chakra-ui/react";
+
+import {
+  ISitterBookingError,
+  ISitterBookingSuccess,
+  ISitterBookingVariables,
+  checkBooking,
+  getSitter,
+  getSitterReviews,
+  sitterBooking,
+} from "../api";
+
 import { useBreakpointValue } from "@chakra-ui/react";
-import { FaStar } from "react-icons/fa";
+import { FaEdit, FaStar, FaUserFriends } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Helmet } from "react-helmet";
+import { formatDate } from "../lib/utils";
 
 export default function SitterDetail() {
+  const { register, handleSubmit } = useForm<ISitterBookingVariables>();
   const { sitterPk } = useParams();
   const { isLoading: isSitterLoading, data: sitterData } =
     useQuery<ISitterDetail>([`sitters`, sitterPk], getSitter);
-  const { isLoading: isReviewsLoading, data: reviewsData } = useQuery<
-    IReview[]
-  >([`sitter`, sitterPk, `reviews`], getSitterReviews);
-  const [dates, setDates] = useState<Date[] | undefined>();
-  const { isLoading: isBookingChecking, data: checkBookingData } = useQuery(
+  const { data: reviewsData } = useQuery<IReview[]>(
+    [`sitter`, sitterPk, `reviews`],
+    getSitterReviews
+  );
+  const [dates, setDates] = useState<any>();
+  const { data: checkBookingData, isLoading: isCheckingBooking } = useQuery(
     ["check", sitterPk, dates],
     checkBooking,
     {
@@ -44,11 +64,38 @@ export default function SitterDetail() {
       enabled: dates !== undefined,
     }
   );
-  const handleDateChange = (value: any) => {
-    setDates(value);
+  const navigate = useNavigate();
+  const onEditClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
+    event.preventDefault(); // click이 링크로 전파되는것을 방지(버블링 방지)한다.
+    navigate(`/sitters/${sitterData?.id}/edit`);
   };
 
-  console.log(isBookingChecking, dates);
+  const toast = useToast();
+  const sitterBookingMutation = useMutation<
+    ISitterBookingSuccess,
+    ISitterBookingError,
+    ISitterBookingVariables
+  >(sitterBooking, {
+    onSuccess: (data) => {
+      toast({
+        title: "Booking complete!",
+        description: `From: ${data.check_in} To: ${data.check_out} Booking Completed`,
+        status: "success",
+        position: "bottom-right",
+      });
+    },
+  });
+  const doBooking = (data: ISitterBookingVariables) => {
+    if (dates && sitterPk) {
+      const [firstDate, secondDate] = dates;
+      const checkIn = formatDate(firstDate);
+      const checkOut = formatDate(secondDate);
+      data.check_in = checkIn;
+      data.check_out = checkOut;
+      data.sitterPk = sitterPk;
+      sitterBookingMutation.mutate(data);
+    }
+  };
 
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
 
@@ -71,9 +118,18 @@ export default function SitterDetail() {
       }}
       width={"100%"}
     >
+      <Helmet>
+        <title>{sitterData ? sitterData.name : "Loading..."}</title>
+      </Helmet>
       <Skeleton height={"43px"} width="50%" isLoaded={!isSitterLoading}>
-        <Heading marginLeft={5}>{sitterData?.category.category_name}</Heading>
+        <HStack>
+          <Heading marginLeft={5}>{sitterData?.category.category_name}</Heading>
+          <Button variant={"unstyled"} onClick={onEditClick}>
+            {sitterData?.is_account ? <FaEdit size={25} /> : null}
+          </Button>
+        </HStack>
       </Skeleton>
+
       <Grid
         mt={8}
         rounded="xl"
@@ -123,7 +179,7 @@ export default function SitterDetail() {
         <Box
           marginTop={5}
           marginLeft={2}
-          backgroundColor={"red"}
+          // backgroundColor={"red"}
           minH={"fit-content"}
         >
           <HStack width={"87%"} justifyContent={"space-between"}>
@@ -137,7 +193,7 @@ export default function SitterDetail() {
               </Skeleton>
               <Skeleton isLoaded={!isSitterLoading} height={"30px"}>
                 <VStack
-                  backgroundColor={"yellow"}
+                  // backgroundColor={"yellow"}
                   minWidth={"360px"}
                   maxWidth={"500px"}
                   minH={"fit-content"}
@@ -148,24 +204,33 @@ export default function SitterDetail() {
                       {sitterData?.country}
                     </Text>
                   </HStack>
+
                   <VStack
+                    borderTop={"2px"}
+                    borderTopColor={"gray.300"}
                     marginTop={5}
-                    marginLeft={5}
                     width={"100%"}
-                    backgroundColor={"purple.500"}
+                    // backgroundColor={"purple.500"}
                     alignItems={"flex-start"}
                   >
-                    <Text fontWeight={800} fontSize={"23px"}>
+                    <Text marginTop={10} fontWeight={800} fontSize={"23px"}>
                       {sitterData?.services.length} service
                       {sitterData?.services.length === 1 ? "" : "s"}
                     </Text>
                     <Service />
                   </VStack>
-                  <Text marginTop={5} marginBottom={10} marginLeft={5}>
-                    {sitterData?.description}
-                  </Text>
-                  <Box minWidth={"300px"} backgroundColor={"green"}>
-                    <Heading mb={5} fontSize={"2xl"}>
+
+                  <Box borderTop={"2px"} borderTopColor={"gray.300"}>
+                    <Text marginTop={10} marginBottom={10} marginLeft={5}>
+                      {sitterData?.description}
+                    </Text>
+                  </Box>
+                  <Box
+                    minWidth={"300px"}
+                    borderTop={"2px"}
+                    borderTopColor={"gray.300"}
+                  >
+                    <Heading marginTop={10} mb={5} fontSize={"2xl"}>
                       <HStack>
                         <FaStar />
                         <Text> {sitterData?.rating}</Text>
@@ -219,7 +284,6 @@ export default function SitterDetail() {
         </Box>
         {isLgScreen && (
           <Box
-            backgroundColor={"blue"}
             marginLeft={-20}
             mt={8}
             paddingX={4}
@@ -227,25 +291,49 @@ export default function SitterDetail() {
             borderRadius="xl"
           >
             <Calendar
-              onChange={handleDateChange}
+              goToRangeStartOnSelect
+              onChange={setDates}
               next2Label={null}
               minDetail="month"
               minDate={new Date()}
               maxDate={new Date(Date.now() + 60 * 60 * 24 * 7 * 4 * 6 * 1000)}
               selectRange
             />
-            <Button
-              my={5}
-              w="100%"
-              colorScheme={"red"}
-              isLoading={isBookingChecking}
-              isDisabled={!checkBookingData?.ok}
+            <Grid
+              templateColumns={"1fr"}
+              as={"form"}
+              onSubmit={handleSubmit(doBooking)}
             >
-              Make booking
-            </Button>
-            {!isBookingChecking && !checkBookingData?.ok ? (
-              <Text color="red.500">Can't book on those dates, sorry.</Text>
-            ) : null}
+              <HStack mt={5} mb={2}>
+                <Text>Pets</Text>
+                <InputGroup>
+                  <InputLeftAddon children={<FaUserFriends />} />
+                  <Select
+                    {...register("pets", { required: true })}
+                    defaultValue={1}
+                    w={"55%"}
+                  >
+                    {[1, 2, 3, 4, 5].map((guest) => (
+                      <option key={guest} value={guest}>
+                        {guest}
+                      </option>
+                    ))}
+                  </Select>
+                </InputGroup>
+              </HStack>
+              <Button
+                type={"submit"}
+                isDisabled={!checkBookingData?.ok}
+                isLoading={isCheckingBooking && dates !== undefined}
+                w={"70%"}
+                colorScheme={"red"}
+              >
+                Make Booking
+              </Button>
+              {!isCheckingBooking && !checkBookingData?.ok ? (
+                <Text color="red.500">Can't book on those dates, sorry.</Text>
+              ) : null}
+            </Grid>
           </Box>
         )}
       </Grid>

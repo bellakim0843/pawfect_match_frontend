@@ -14,17 +14,12 @@ export interface ISitterList {
   rating: number;
   is_account: boolean;
   category: number;
+  is_liked: boolean;
 }
 
 export interface ISitterAccount {
   name: string;
   username: string;
-}
-
-export interface IService {
-  pk: number;
-  service_name: string;
-  description: string;
 }
 
 export interface ICategory {
@@ -61,6 +56,7 @@ export interface IUser {
 }
 
 export interface IService {
+  pk: number;
   service_name: string;
   description: string;
 }

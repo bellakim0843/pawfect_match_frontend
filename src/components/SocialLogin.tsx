@@ -27,7 +27,6 @@ export default function SocialLogin() {
           Continue with FaceBook
         </Button>
         <Button
-          as="a"
           width={"100%"}
           leftIcon={<FaGithub />}
           backgroundColor="black"

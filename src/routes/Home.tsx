@@ -1,5 +1,13 @@
-import React, { useState } from "react";
-import { Box, Button, Grid, HStack, Text, VStack } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Button,
+  Grid,
+  useEditable,
+  HStack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import Sitter from "../components/Sitter";
 import SitterSkeleton from "../components/SitterSkeleton";
 import { useQuery } from "@tanstack/react-query";
@@ -16,6 +24,7 @@ import { color } from "framer-motion";
 
 export default function Home() {
   const { isLoading, data } = useQuery<ISitterList[]>(["sitters"], getSitters);
+
   const [filterCategory, setFilterCategory] = useState<number | null>(null);
 
   if (isLoading) {
@@ -187,6 +196,7 @@ export default function Home() {
               nutritionist
             </VStack>
           </Button>
+
           <Button
             color="gray.500"
             onClick={() => handleFilterChange(5)}
@@ -220,6 +230,39 @@ export default function Home() {
               </Text>
             </VStack>
           </Button>
+          <Button
+            color="gray.500"
+            onClick={() => handleFilterChange(null)}
+            variant="unstyled"
+            position="relative"
+            _hover={{
+              color: "black",
+              transform: "scale(1.05)",
+              opacity: 0.8,
+              _before: {
+                transform: "scaleX(1)",
+              },
+            }}
+            _before={{
+              content: '""',
+              position: "absolute",
+              bottom: "-35px", // Adjust this value to change the position
+              left: 0,
+              width: "100%",
+              height: "2px",
+              backgroundColor: "black", // Change this to the desired color of the line
+              transform: "scaleX(0)",
+              transformOrigin: "left",
+              transition: "transform 0.2s ease",
+            }}
+          >
+            <VStack>
+              <FaBone size={30} />
+              <Text fontWeight={"medium"} fontSize={15}>
+                WishList
+              </Text>
+            </VStack>
+          </Button>
         </HStack>
       </Box>
       {/* Add more buttons for other categories if needed */}
@@ -247,9 +290,17 @@ export default function Home() {
             country={sitter.country}
             price={sitter.price}
             category={sitter.category}
+            is_liked={sitter.is_liked}
           />
         ))}
       </Grid>
+      <Grid
+        marginLeft={10}
+        marginRight={10}
+        mt={10}
+        columnGap={5}
+        templateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+      ></Grid>
     </Box>
   );
 }

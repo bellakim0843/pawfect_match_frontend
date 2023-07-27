@@ -1,6 +1,7 @@
 import { QueryFunctionContext, QueryKey } from "@tanstack/react-query";
 import Cookie from "js-cookie";
 import axios from "axios";
+import { formatDate } from "./lib/utils";
 const instance = axios.create({
   baseURL: "http://127.0.0.1:8000/",
   withCredentials: true,
@@ -32,6 +33,19 @@ export const logOut = () =>
       },
     })
     .then((response) => response.data);
+
+export const githubLogIn = (code: string) =>
+  instance
+    .post(
+      `/users/github`,
+      { code },
+      {
+        headers: {
+          "X-CSRFToken": Cookie.get("csrftoken") || "",
+        },
+      }
+    )
+    .then((response) => response.status);
 
 export const getServices = () =>
   instance.get(`sitters/services/`).then((response) => response.data);
@@ -84,6 +98,45 @@ export const uploadSitter = (variables: IUploadSitterVariables) =>
     })
     .then((response) => response.data);
 
+interface ISignUpVariables {
+  name: string;
+  email: string;
+  username: string;
+  password: string;
+}
+
+export const SignUp = ({ username, password, email, name }: ISignUpVariables) =>
+  instance
+    .post(
+      `users/`,
+      { username, password, email, name },
+      {
+        headers: { "X-CSRFToken": Cookie.get("csrftoken") || "" },
+      }
+    )
+    .then((response) => response.data);
+
+export interface IUpdateSitterVariables {
+  sitterPk: string;
+  name: string;
+  country: string;
+  city: string;
+  address: string;
+  price: number;
+  description: string;
+  services: number[];
+  category: number[];
+}
+
+export const updateSitter = (variables: IUpdateSitterVariables) =>
+  instance
+    .put(`sitters/${variables.sitterPk}`, variables, {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || "",
+      },
+    })
+    .then((response) => response.data);
+
 type CheckBookingQueryKey = [string, string?, Date[]?];
 
 export const checkBooking = ({
@@ -92,8 +145,8 @@ export const checkBooking = ({
   const [first, sitterPk, dates] = queryKey;
   if (dates) {
     const [firstDate, secondDate] = dates;
-    const [checkIn] = firstDate.toJSON().split("T");
-    const [checkOut] = secondDate.toJSON().split("T");
+    const checkIn = formatDate(firstDate);
+    const checkOut = formatDate(secondDate);
     return instance
       .get(
         `sitters/${sitterPk}/bookings/check?check_in=${checkIn}&check_out=${checkOut}`
@@ -101,3 +154,36 @@ export const checkBooking = ({
       .then((response) => response.data);
   }
 };
+
+export interface ISitterBookingVariables {
+  check_in: string;
+  check_out: string;
+  sitterPk: string;
+  pets: number;
+}
+
+export interface ISitterBookingSuccess {
+  check_in: string;
+  check_out: string;
+}
+
+export type sitterBookingErrMsgType = {
+  [key: string]: string[];
+};
+
+export interface ISitterBookingError {
+  response: {
+    data: sitterBookingErrMsgType;
+    status: number;
+    statusText: string;
+  };
+}
+
+export const sitterBooking = (variables: ISitterBookingVariables) =>
+  instance
+    .post(`sitters/${variables.sitterPk}/bookings`, variables, {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || "",
+      },
+    })
+    .then((response) => response.data);
