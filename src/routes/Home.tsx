@@ -230,39 +230,6 @@ export default function Home() {
               </Text>
             </VStack>
           </Button>
-          <Button
-            color="gray.500"
-            onClick={() => handleFilterChange(null)}
-            variant="unstyled"
-            position="relative"
-            _hover={{
-              color: "black",
-              transform: "scale(1.05)",
-              opacity: 0.8,
-              _before: {
-                transform: "scaleX(1)",
-              },
-            }}
-            _before={{
-              content: '""',
-              position: "absolute",
-              bottom: "-35px", // Adjust this value to change the position
-              left: 0,
-              width: "100%",
-              height: "2px",
-              backgroundColor: "black", // Change this to the desired color of the line
-              transform: "scaleX(0)",
-              transformOrigin: "left",
-              transition: "transform 0.2s ease",
-            }}
-          >
-            <VStack>
-              <FaBone size={30} />
-              <Text fontWeight={"medium"} fontSize={15}>
-                WishList
-              </Text>
-            </VStack>
-          </Button>
         </HStack>
       </Box>
       {/* Add more buttons for other categories if needed */}
@@ -276,7 +243,7 @@ export default function Home() {
         marginRight={10}
         mt={10}
         columnGap={5}
-        templateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+        templateColumns={"repeat(auto-fit, minmax(250px, 1fr))"}
       >
         {filteredSitters?.map((sitter) => (
           <Sitter

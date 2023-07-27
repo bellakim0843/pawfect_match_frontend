@@ -60,3 +60,19 @@ export interface IService {
   service_name: string;
   description: string;
 }
+
+export interface IUserBookingList {
+  pk: number;
+  sitter: ISitterDetail;
+  check_in: string;
+  check_out: string;
+  pets: number;
+}
+
+export interface ISitterBookingList {
+  pk: number;
+  check_in: string;
+  check_out: string;
+  pets: number;
+  user: ISitterAccount;
+}

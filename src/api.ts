@@ -187,3 +187,14 @@ export const sitterBooking = (variables: ISitterBookingVariables) =>
       },
     })
     .then((response) => response.data);
+
+export const getUserBookings = () =>
+  instance.get("users/bookings").then((response) => response.data);
+
+export const getSitterBookings = ({ queryKey }: QueryFunctionContext) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, sitterPk] = queryKey;
+  return instance
+    .get(`sitters/${sitterPk}/bookings`)
+    .then((response) => response.data);
+};

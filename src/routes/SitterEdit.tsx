@@ -98,7 +98,7 @@ export default function SitterEdit() {
                   required
                   type="text"
                 />
-                <FormHelperText>Wirte the name of your Sitter.</FormHelperText>
+                <FormHelperText>Write your name</FormHelperText>
               </FormControl>
               <FormControl>
                 <FormLabel>Country</FormLabel>

@@ -40,7 +40,7 @@ import {
 } from "../api";
 
 import { useBreakpointValue } from "@chakra-ui/react";
-import { FaEdit, FaStar, FaUserFriends } from "react-icons/fa";
+import { FaBookOpen, FaEdit, FaStar, FaUserFriends } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet";
@@ -68,6 +68,13 @@ export default function SitterDetail() {
   const onEditClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
     event.preventDefault(); // click이 링크로 전파되는것을 방지(버블링 방지)한다.
     navigate(`/sitters/${sitterData?.id}/edit`);
+  };
+
+  const onBookingUsersClick = (
+    event: React.SyntheticEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault(); // click이 링크로 전파되는것을 방지(버블링 방지)한다.
+    navigate(`/sitters/${sitterData?.id}/bookings`);
   };
 
   const toast = useToast();
@@ -126,6 +133,9 @@ export default function SitterDetail() {
           <Heading marginLeft={5}>{sitterData?.category.category_name}</Heading>
           <Button variant={"unstyled"} onClick={onEditClick}>
             {sitterData?.is_account ? <FaEdit size={25} /> : null}
+          </Button>
+          <Button variant={"unstyled"} onClick={onBookingUsersClick}>
+            {sitterData?.is_account ? <FaBookOpen size={25} /> : null}
           </Button>
         </HStack>
       </Skeleton>

@@ -10,6 +10,8 @@ import UploadPhotos from "./routes/UploadPhotos";
 import Sitter from "./components/Sitter";
 import { getSitter } from "./api";
 import SitterEdit from "./routes/SitterEdit";
+import MyBooking from "./routes/MyBooking";
+import SitterBookings from "./routes/SitterBookings";
 
 const router = createBrowserRouter([
   {
@@ -22,12 +24,20 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
+        path: "mybooking",
+        element: <MyBooking />,
+      },
+      {
         path: "sitters/upload",
         element: <UploadSitter />,
       },
       {
         path: "sitters/:sitterPk",
         element: <SitterDetail />,
+      },
+      {
+        path: "sitters/:sitterPk/bookings",
+        element: <SitterBookings />,
       },
       {
         path: "sitters/:sitterPk/edit",

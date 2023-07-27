@@ -47,7 +47,7 @@ export default function Header() {
   const mutation = useMutation(logOut, {
     onMutate: () => {
       toastId.current = toast({
-        title: "Login out...",
+        title: "Logging out...",
         description: "Sad to see you go...",
         status: "loading",
         position: "bottom-right",
@@ -61,80 +61,87 @@ export default function Header() {
           title: "Done!",
           description: "See you later!",
         });
+        window.location.reload(); // Refresh the page after successful logout
       }
     },
   });
+
   const onLogOut = async () => {
     mutation.mutate();
   };
 
   return (
-    <Stack
-      backgroundColor={"orange.300"}
-      justifyContent={"space-between"}
-      spacing={{
-        sm: 3,
-        md: 0,
-      }}
-      alignItems={"center"}
-      py={5}
-      px={10}
-      direction={{
-        sm: "column",
-        md: "row",
-      }}
-      borderBottomWidth={1}
-      style={{
-        boxShadow: "0px 1px 4px rgba(0, 0, 0, 0.2)", // Add the shadow effect
-      }}
-    >
-      <Box px={10} color={logoColor}>
-        <Link to={"/"}>
-          <FaPaw size={"48"} />
-        </Link>
-      </Box>
-      <Box>
-        <Text fontFamily={"Gill Sans"} fontSize={30} color={"white"}>
-          Pawfect Match
-        </Text>
-      </Box>
-      <HStack spacing={2}>
-        <IconButton
-          onClick={toggleColorMode}
-          variant={"ghost"}
-          aria-label="Toggle dark mode"
-          color={"orange.900"}
-          icon={<Icon />}
-        />
-        {!userLoading ? (
-          !isLoggedIn ? (
-            <>
-              <Button onClick={onLoginOpen}>Log in</Button>
-              <LightMode>
-                <Button onClick={onSignUpOpen} colorScheme={"red"}>
-                  Sign up
-                </Button>
-              </LightMode>
-            </>
-          ) : (
-            <Menu>
-              <MenuButton>
-                <Avatar name={user?.name} size={"md"} />
-              </MenuButton>
-              <MenuList>
-                {user?.is_sitter ? (
-                  <Link to="/sitters/upload">
-                    <MenuItem>Upload your profile</MenuItem>
+    <Box width={"100%"}>
+      <Stack
+        backgroundColor={"orange.300"}
+        justifyContent={"space-between"}
+        spacing={{
+          sm: 3,
+          md: 0,
+        }}
+        alignItems={"center"}
+        py={5}
+        px={10}
+        direction={{
+          sm: "column",
+          md: "row",
+        }}
+        borderBottomWidth={1}
+        style={{
+          boxShadow: "0px 1px 4px rgba(0, 0, 0, 0.2)", // Add the shadow effect
+        }}
+      >
+        <Box px={10} color={logoColor}>
+          <Link to={"/"}>
+            <FaPaw size={"48"} />
+          </Link>
+        </Box>
+        <Box>
+          <Text fontFamily={"Gill Sans"} fontSize={30} color={"white"}>
+            Pawfect Match
+          </Text>
+        </Box>
+        <HStack spacing={2}>
+          <IconButton
+            onClick={toggleColorMode}
+            variant={"ghost"}
+            aria-label="Toggle dark mode"
+            color={"orange.900"}
+            icon={<Icon />}
+          />
+          {!userLoading ? (
+            !isLoggedIn ? (
+              <>
+                <Button onClick={onLoginOpen}>Log in</Button>
+                <LightMode>
+                  <Button onClick={onSignUpOpen} colorScheme={"red"}>
+                    Sign up
+                  </Button>
+                </LightMode>
+              </>
+            ) : (
+              <Menu>
+                <MenuButton>
+                  <Avatar name={user?.name} size={"md"} />
+                </MenuButton>
+                <MenuList>
+                  {user?.is_sitter ? (
+                    <Link to="/sitters/upload">
+                      <MenuItem>Upload your profile</MenuItem>
+                    </Link>
+                  ) : null}
+                  <Link to="/mybooking">
+                    <MenuItem>My Bookings</MenuItem>
                   </Link>
-                ) : null}
-                <MenuItem onClick={onLogOut}>Log Out</MenuItem>
-              </MenuList>
-            </Menu>
-          )
-        ) : null}
-      </HStack>
-      <LoginModal isOpen={isLoginOpen} onClose={onLoginClose} />
-      <SignUpModal isOpen={isSignUpOpen} onClose={onSignUpClose} />
-    </Stack>
+                  <MenuItem onClick={onLogOut}>Log Out</MenuItem>
+                </MenuList>
+              </Menu>
+            )
+          ) : null}
+        </HStack>
+        <LoginModal isOpen={isLoginOpen} onClose={onLoginClose} />
+        <SignUpModal isOpen={isSignUpOpen} onClose={onSignUpClose} />
+      </Stack>
+    </Box>
   );
 }
