@@ -1,3 +1,5 @@
+import { StringLiteral } from "typescript";
+
 export interface ISitterPhoto {
   pk: string;
   file: string;
@@ -46,6 +48,7 @@ export interface IReview {
 }
 
 export interface IUser {
+  pk: number;
   last_login: string;
   username: string;
   email: string;
@@ -75,4 +78,24 @@ export interface ISitterBookingList {
   check_out: string;
   pets: number;
   user: ISitterAccount;
+  pet: IPet;
+}
+
+export interface IPet extends IOwner {
+  pk: number;
+  petname: string;
+  sex: string;
+  age: number;
+  weight: number;
+  breed: string;
+  neutering: boolean;
+  description: string;
+}
+
+export interface IOwner extends IUser {
+  id: number;
+  name: string;
+  gender: string[];
+  pet: IPet;
+  account: IUser;
 }

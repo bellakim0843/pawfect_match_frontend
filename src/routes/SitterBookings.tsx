@@ -19,23 +19,22 @@ export default function SitterBookings() {
 
   return (
     <ProtectedPage>
-      <Box pb={40} mt={10} px={{ base: 10, lg: 40 }}>
-        <Grid gap={10} templateColumns={"1fr 1fr"}>
+      <Box pb={40} mt={10} marginLeft={10}>
+        <Grid gap={10} templateColumns={{ sm: "1fr", md: "1fr 1fr" }}>
           {data?.map((sitterBooking) => (
             <HStack key={sitterBooking.pk}>
               <Avatar name={sitterBooking.user.name} size={"xl"} />
               <Box>
                 {sitterBooking.user?.name && (
                   <Text display={"block"} as="b" noOfLines={1} fontSize="md">
-                    Reservation name: {sitterBooking.user.name}
+                    Owner: {sitterBooking.user.name}
                   </Text>
                 )}
-                <Text display={"block"} noOfLines={1} fontSize="md">
-                  Reservation Period: {sitterBooking.check_in} ~{" "}
-                  {sitterBooking.check_out}
+                <Text display={"block"} noOfLines={2} fontSize="md">
+                  From: {sitterBooking.check_in} To : {sitterBooking.check_out}
                 </Text>
                 <Text display={"block"} noOfLines={1} fontSize="md">
-                  Guests: {sitterBooking.pets}
+                  Pets: {sitterBooking.pets}
                 </Text>
               </Box>
             </HStack>

@@ -2,6 +2,7 @@ import { QueryFunctionContext, QueryKey } from "@tanstack/react-query";
 import Cookie from "js-cookie";
 import axios from "axios";
 import { formatDate } from "./lib/utils";
+import { IOwner, IPet } from "./types";
 const instance = axios.create({
   baseURL: "http://127.0.0.1:8000/",
   withCredentials: true,
@@ -21,6 +22,30 @@ export const getSitterReviews = ({ queryKey }: QueryFunctionContext) => {
     .get(`sitters/${sitterPk}/reviews`)
     .then((response) => response.data);
 };
+
+export const getOwners = () =>
+  instance.get("owners/").then((response) => response.data);
+
+export const getOwner = ({ queryKey }: QueryFunctionContext) => {
+  const [, ownerPk] = queryKey;
+  return instance.get(`owners/${ownerPk}`).then((response) => response.data);
+};
+
+export interface IUpdateOwnerVariables {
+  ownerPk: string;
+  name: string;
+  gender: string;
+  Pet: IPet;
+}
+
+export const updateOwner = (variables: IUpdateOwnerVariables) =>
+  instance
+    .put(`owners/${variables.ownerPk}`, variables, {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || "",
+      },
+    })
+    .then((response) => response.data);
 
 export const getMe = () =>
   instance.get(`users/me`).then((response) => response.data);
@@ -79,6 +104,7 @@ export const usernameLogIn = ({
   );
 
 export interface IUploadSitterVariables {
+  pk: number;
   name: string;
   country: string;
   city: string;
@@ -198,3 +224,74 @@ export const getSitterBookings = ({ queryKey }: QueryFunctionContext) => {
     .get(`sitters/${sitterPk}/bookings`)
     .then((response) => response.data);
 };
+
+export interface IUploadOwnerVariables {
+  id: number;
+  name: string;
+  gender: string;
+  account: string[];
+}
+
+export const uploadOwner = (variables: IUploadOwnerVariables) =>
+  instance
+    .post(`owners/`, variables, {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || "",
+      },
+    })
+    .then((response) => response.data);
+
+export interface IUpdateOwnerVariables {
+  id: number;
+  name: string;
+  gender: string;
+  account: string[];
+}
+
+export interface IUploadPetVariables {
+  petname: string;
+  sex: string;
+  age: number;
+  weight: number;
+  breed: string;
+  neutering: boolean;
+  description: string;
+}
+
+export const getPets = () =>
+  instance.get("pets/").then((response) => response.data);
+
+export const getPet = ({ queryKey }: QueryFunctionContext) => {
+  const [, petPk] = queryKey;
+  return instance.get(`pets/${petPk}`).then((response) => response.data);
+};
+
+export const uploadPet = (variables: IUploadPetVariables) =>
+  instance
+    .post(`pets/`, variables, {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || "",
+      },
+    })
+    .then((response) => response.data);
+
+export interface IUpdatePetVariables {
+  petPk: number;
+  petname: string;
+  sex: string;
+  age: number;
+  weight: number;
+  breed: string;
+  neutering: boolean;
+  description: string;
+  account: IOwner;
+}
+
+export const updatePet = (variables: IUpdatePetVariables) =>
+  instance
+    .put(`pets/${variables.petPk}`, variables, {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || "",
+      },
+    })
+    .then((response) => response.data);

@@ -53,13 +53,13 @@ export default function UploadSitter() {
   const toast = useToast();
   const navigate = useNavigate();
   const mutation = useMutation(uploadSitter, {
-    onSuccess: (data: ISitterDetail) => {
+    onSuccess: (sitterData: ISitterDetail) => {
       toast({
         status: "success",
         title: "Sitter created",
         position: "bottom-right",
       });
-      navigate(`/sitters/${data.id}`);
+      navigate(`/sitters/${sitterData.id}`);
     },
   });
   const { data: services } = useQuery<IService[]>(["services"], getServices);

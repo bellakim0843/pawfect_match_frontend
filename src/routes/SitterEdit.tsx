@@ -18,7 +18,7 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import { FaBed, FaMoneyBill, FaToilet } from "react-icons/fa";
+import { FaMoneyBill } from "react-icons/fa";
 import {
   IUpdateSitterVariables,
   getServices,

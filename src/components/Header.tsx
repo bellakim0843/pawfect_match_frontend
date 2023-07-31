@@ -55,7 +55,7 @@ export default function Header() {
     },
     onSuccess: () => {
       if (toastId.current) {
-        queryClient.refetchQueries(["me"]);
+        queryClient.invalidateQueries(["me"]); // Invalidate the "me" query instead of refetching
         toast.update(toastId.current, {
           status: "success",
           title: "Done!",
@@ -127,9 +127,16 @@ export default function Header() {
                 <MenuList>
                   {user?.is_sitter ? (
                     <Link to="/sitters/upload">
-                      <MenuItem>Upload your profile</MenuItem>
+                      <MenuItem>Upload Sitter's profile</MenuItem>
                     </Link>
-                  ) : null}
+                  ) : (
+                    <Link to="/owners/upload">
+                      <MenuItem>Upload Owner's profile</MenuItem>
+                    </Link>
+                  )}
+                  <Link to="/pets/upload">
+                    <MenuItem>Upload Pet's profile</MenuItem>
+                  </Link>
                   <Link to="/mybooking">
                     <MenuItem>My Bookings</MenuItem>
                   </Link>

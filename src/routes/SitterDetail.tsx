@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "../calendar.css";
-import { IReview, ISitterDetail, ICategory } from "../types";
+import { IReview, ISitterDetail, ICategory, IUser } from "../types";
 import Service from "../components/Service";
 import {
   Avatar,
@@ -27,6 +27,7 @@ import {
   ModalCloseButton,
   ModalBody,
   useToast,
+  Input,
 } from "@chakra-ui/react";
 
 import {
@@ -34,6 +35,7 @@ import {
   ISitterBookingSuccess,
   ISitterBookingVariables,
   checkBooking,
+  getMe,
   getSitter,
   getSitterReviews,
   sitterBooking,
@@ -49,6 +51,9 @@ import { formatDate } from "../lib/utils";
 export default function SitterDetail() {
   const { register, handleSubmit } = useForm<ISitterBookingVariables>();
   const { sitterPk } = useParams();
+  const { userPk } = useParams();
+  const { data: userData } = useQuery<IUser>([`users`, userPk], getMe);
+  console.log(userData);
   const { isLoading: isSitterLoading, data: sitterData } =
     useQuery<ISitterDetail>([`sitters`, sitterPk], getSitter);
   const { data: reviewsData } = useQuery<IReview[]>(
@@ -292,60 +297,71 @@ export default function SitterDetail() {
             />
           </HStack>
         </Box>
-        {isLgScreen && (
-          <Box
-            marginLeft={-20}
-            mt={8}
-            paddingX={4}
-            paddingY={6}
-            borderRadius="xl"
-          >
-            <Calendar
-              goToRangeStartOnSelect
-              onChange={setDates}
-              next2Label={null}
-              minDetail="month"
-              minDate={new Date()}
-              maxDate={new Date(Date.now() + 60 * 60 * 24 * 7 * 4 * 6 * 1000)}
-              selectRange
-            />
-            <Grid
-              templateColumns={"1fr"}
-              as={"form"}
-              onSubmit={handleSubmit(doBooking)}
-            >
-              <HStack mt={5} mb={2}>
-                <Text>Pets</Text>
-                <InputGroup>
-                  <InputLeftAddon children={<FaUserFriends />} />
-                  <Select
-                    {...register("pets", { required: true })}
-                    defaultValue={1}
-                    w={"55%"}
-                  >
-                    {[1, 2, 3, 4, 5].map((guest) => (
-                      <option key={guest} value={guest}>
-                        {guest}
-                      </option>
-                    ))}
-                  </Select>
-                </InputGroup>
-              </HStack>
-              <Button
-                type={"submit"}
-                isDisabled={!checkBookingData?.ok}
-                isLoading={isCheckingBooking && dates !== undefined}
-                w={"70%"}
-                colorScheme={"red"}
+        {!userData?.is_sitter ? (
+          <>
+            {isLgScreen && (
+              <Box
+                marginLeft={-20}
+                mt={8}
+                paddingX={4}
+                paddingY={6}
+                borderRadius="xl"
               >
-                Make Booking
-              </Button>
-              {!isCheckingBooking && !checkBookingData?.ok ? (
-                <Text color="red.500">Can't book on those dates, sorry.</Text>
-              ) : null}
-            </Grid>
-          </Box>
-        )}
+                <Calendar
+                  goToRangeStartOnSelect
+                  onChange={setDates}
+                  next2Label={null}
+                  minDetail="month"
+                  minDate={new Date()}
+                  maxDate={
+                    new Date(Date.now() + 60 * 60 * 24 * 7 * 4 * 6 * 1000)
+                  }
+                  selectRange
+                />
+                <Grid
+                  templateColumns={"1fr"}
+                  as={"form"}
+                  onSubmit={handleSubmit(doBooking)}
+                >
+                  <HStack mt={5} mb={2}>
+                    <Text>Pets</Text>
+                    <InputGroup>
+                      <InputLeftAddon children={<FaUserFriends />} />
+                      <Select
+                        {...register("pets", { required: true })}
+                        defaultValue={1}
+                        w={"55%"}
+                      >
+                        {[1, 2, 3, 4, 5].map((guest) => (
+                          <option key={guest} value={guest}>
+                            {guest}
+                          </option>
+                        ))}
+                      </Select>
+                    </InputGroup>
+                    <InputGroup>
+                      <Input placeholder="Pet"></Input>
+                    </InputGroup>
+                  </HStack>
+                  <Button
+                    type={"submit"}
+                    isDisabled={!checkBookingData?.ok}
+                    isLoading={isCheckingBooking && dates !== undefined}
+                    w={"70%"}
+                    colorScheme={"red"}
+                  >
+                    Make Booking
+                  </Button>
+                  {!isCheckingBooking && !checkBookingData?.ok ? (
+                    <Text color="red.500">
+                      Can't book on those dates, sorry.
+                    </Text>
+                  ) : null}
+                </Grid>
+              </Box>
+            )}
+          </>
+        ) : null}
       </Grid>
       <Modal isOpen={selectedPhoto !== null} onClose={closeModal} size="xl">
         <ModalOverlay />
