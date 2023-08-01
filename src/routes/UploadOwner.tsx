@@ -35,7 +35,7 @@ import {
   IUploadOwnerVariables,
   uploadOwner,
 } from "../api";
-import { IService, ICategory, IPet, IUser, IOwner } from "../types";
+import { IService, ICategory, IUser, IOwner } from "../types";
 import { useNavigate } from "react-router-dom";
 
 export default function UploadOwner() {
@@ -69,7 +69,7 @@ export default function UploadOwner() {
         }}
       >
         <Container>
-          <Heading textAlign={"center"}>Upload Pet's information</Heading>
+          <Heading textAlign={"center"}>Upload Account's information</Heading>
           <VStack
             spacing={10}
             as="form"
@@ -77,7 +77,7 @@ export default function UploadOwner() {
             mt={5}
           >
             <FormControl>
-              <FormLabel>Pet Name</FormLabel>
+              <FormLabel>Name</FormLabel>
               <Input
                 {...register("name", { required: true })}
                 required
@@ -95,6 +95,67 @@ export default function UploadOwner() {
                 <option value="male">Male</option>
                 <option value="female">Female</option>
               </Select>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Pet Name</FormLabel>
+              <Input
+                {...register("pet_name", { required: true })}
+                required
+                type="text"
+              />
+              <FormHelperText>Write your pet's name.</FormHelperText>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Gender</FormLabel>
+              <Select
+                {...register("pet_gender", { required: true })}
+                required
+                defaultValue=""
+              >
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </Select>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Pet Age</FormLabel>
+              <Input
+                {...register("pet_age", { required: true })}
+                required
+                type="text"
+              />
+              <FormHelperText>Write your pet's age.</FormHelperText>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Weight</FormLabel>
+              <Input
+                {...register("pet_weight", { required: true })}
+                required
+                type="text"
+              />
+              <FormHelperText>Write your pet's weight.</FormHelperText>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Breed</FormLabel>
+              <Input
+                {...register("pet_breed", { required: true })}
+                required
+                type="text"
+              />
+              <FormHelperText>Write your pet's breed.</FormHelperText>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Neutering</FormLabel>
+              <Checkbox {...register("neutering", { required: true })} />
+              <FormHelperText>Check if your pet has neutered.</FormHelperText>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Description</FormLabel>
+              <Input
+                {...register("pet_description", { required: true })}
+                required
+                type="text"
+              />
+              <FormHelperText>Write your pet's information.</FormHelperText>
             </FormControl>
 
             {mutation.isError ? (

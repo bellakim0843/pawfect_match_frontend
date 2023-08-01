@@ -42,7 +42,7 @@ import {
 } from "../api";
 
 import { useBreakpointValue } from "@chakra-ui/react";
-import { FaBookOpen, FaEdit, FaStar, FaUserFriends } from "react-icons/fa";
+import { FaBookOpen, FaEdit, FaStar, FaDog } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet";
@@ -53,9 +53,11 @@ export default function SitterDetail() {
   const { sitterPk } = useParams();
   const { userPk } = useParams();
   const { data: userData } = useQuery<IUser>([`users`, userPk], getMe);
-  console.log(userData);
+  // console.log(userData);
   const { isLoading: isSitterLoading, data: sitterData } =
     useQuery<ISitterDetail>([`sitters`, sitterPk], getSitter);
+  console.log(`/sitters/${sitterData?.id}`);
+
   const { data: reviewsData } = useQuery<IReview[]>(
     [`sitter`, sitterPk, `reviews`],
     getSitterReviews
@@ -306,6 +308,7 @@ export default function SitterDetail() {
                 paddingX={4}
                 paddingY={6}
                 borderRadius="xl"
+                minWidth={"570px"}
               >
                 <Calendar
                   goToRangeStartOnSelect
@@ -323,10 +326,10 @@ export default function SitterDetail() {
                   as={"form"}
                   onSubmit={handleSubmit(doBooking)}
                 >
-                  <HStack mt={5} mb={2}>
+                  <HStack marginLeft={"16%"} mt={10} mb={5}>
                     <Text>Pets</Text>
                     <InputGroup>
-                      <InputLeftAddon children={<FaUserFriends />} />
+                      <InputLeftAddon children={<FaDog />} />
                       <Select
                         {...register("pets", { required: true })}
                         defaultValue={1}
@@ -339,9 +342,6 @@ export default function SitterDetail() {
                         ))}
                       </Select>
                     </InputGroup>
-                    <InputGroup>
-                      <Input placeholder="Pet"></Input>
-                    </InputGroup>
                   </HStack>
                   <Button
                     type={"submit"}
@@ -349,6 +349,7 @@ export default function SitterDetail() {
                     isLoading={isCheckingBooking && dates !== undefined}
                     w={"70%"}
                     colorScheme={"red"}
+                    marginLeft={"16%"}
                   >
                     Make Booking
                   </Button>

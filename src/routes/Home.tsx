@@ -11,8 +11,14 @@ import {
 import Sitter from "../components/Sitter";
 import SitterSkeleton from "../components/SitterSkeleton";
 import { useQuery } from "@tanstack/react-query";
-import { getSitters } from "../api";
-import { ISitterList } from "../types";
+import {
+  getMe,
+  getOwner,
+  getOwners,
+  getSitters,
+  getUserBookings,
+} from "../api";
+import { IOwner, ISitterList, IUser } from "../types";
 import {
   FaRegCheckCircle,
   FaDog,
@@ -24,6 +30,12 @@ import { color } from "framer-motion";
 
 export default function Home() {
   const { isLoading, data } = useQuery<ISitterList[]>(["sitters"], getSitters);
+  const { isLoading: isOwnerLoading, data: ownerData } = useQuery<IOwner[]>(
+    ["owners"],
+    getOwner
+  );
+  const { data: userData } = useQuery<IUser[]>(["users"], getMe);
+  console.log(userData);
 
   const [filterCategory, setFilterCategory] = useState<number | null>(null);
 
@@ -34,7 +46,7 @@ export default function Home() {
         marginRight={10}
         mt={10}
         columnGap={5}
-        templateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+        templateColumns="repeat(auto-fit, minmax(0px, 1fr))"
       >
         <SitterSkeleton />
         <SitterSkeleton />
@@ -53,10 +65,8 @@ export default function Home() {
   const filteredSitters = filterCategory
     ? data?.filter((sitter) => sitter.category === filterCategory)
     : data;
-
   return (
     <Box>
-      {/* Add filter buttons here */}
       <Box>
         <HStack justifyContent={"center"} marginTop={5} marginBottom={12}>
           <Button

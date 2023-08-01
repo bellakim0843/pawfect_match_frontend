@@ -18,13 +18,14 @@ import {
   MenuItem,
   useToast,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import LoginModal from "./LoginModal";
 import SignUpModal from "./SignUpModal";
 import useUser from "../lib/useUser";
-import { logOut } from "../api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { getMe, getOwner, getOwnerMe, getOwners, logOut } from "../api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
+import { IOwner, IUser } from "../types";
 
 export default function Header() {
   const { userLoading, isLoggedIn, user } = useUser();
@@ -69,7 +70,18 @@ export default function Header() {
   const onLogOut = async () => {
     mutation.mutate();
   };
-
+  const { ownerPk } = useParams();
+  const { userPk } = useParams();
+  const { data: userData } = useQuery<IOwner>([`owners`, ownerPk], getOwnerMe);
+  const { isLoading: isOwnerLoading, data: ownerData } = useQuery<IOwner>(
+    [`owners`, ownerPk],
+    getOwner
+  );
+  const navigate = useNavigate();
+  const onEditClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
+    event.preventDefault(); // click이 링크로 전파되는것을 방지(버블링 방지)한다.
+    navigate(`/owners/${ownerData?.id}`);
+  };
   return (
     <Box width={"100%"}>
       <Stack
@@ -134,12 +146,17 @@ export default function Header() {
                       <MenuItem>Upload Owner's profile</MenuItem>
                     </Link>
                   )}
-                  <Link to="/pets/upload">
-                    <MenuItem>Upload Pet's profile</MenuItem>
-                  </Link>
-                  <Link to="/mybooking">
-                    <MenuItem>My Bookings</MenuItem>
-                  </Link>
+
+                  {user?.is_sitter ? null : (
+                    <MenuItem onClick={onEditClick}>My Profile</MenuItem>
+                  )}
+
+                  {user?.is_sitter ? null : (
+                    <Link to="/mybooking">
+                      <MenuItem>My Booking</MenuItem>
+                    </Link>
+                  )}
+
                   <MenuItem onClick={onLogOut}>Log Out</MenuItem>
                 </MenuList>
               </Menu>

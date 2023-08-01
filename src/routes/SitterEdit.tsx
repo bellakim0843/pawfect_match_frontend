@@ -45,6 +45,7 @@ export default function SitterEdit() {
         status: "success",
         position: "bottom-right",
       });
+
       navigate(`/sitters/${data.id}`);
     },
   });

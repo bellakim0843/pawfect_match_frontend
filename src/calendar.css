@@ -2,11 +2,12 @@
   width: 100%;
   background: transparent;
   border: none;
-  box-shadow: var(--chakra-shadows-lg);
+  box-shadow: var(--chakra-shadows-xl);
   padding: var(--chakra-sizes-5);
-  border-radius: 20px;
+  /* border-radius: 20px; */
   font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.125em;
+  line-height: 2em;
+  border: 4px, black;
 }
 .react-calendar--doubleView {
   width: 700px;
@@ -36,8 +37,10 @@
   cursor: pointer;
 }
 .react-calendar__navigation {
-  height: 44px;
+  height: 60px;
   margin-bottom: 1em;
+  font-size: 25px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 .react-calendar__navigation button {
   min-width: 44px;
@@ -54,7 +57,8 @@
   text-align: center;
   text-transform: uppercase;
   font-weight: bold;
-  font-size: 0.75em;
+  font-size: 0.8em;
+  color: #757575;
 }
 .react-calendar__month-view__weekdays__weekday {
   padding: 0.5em;
@@ -70,7 +74,7 @@
   padding: calc(0.75em / 0.75) calc(0.5em / 0.75);
 }
 .react-calendar__month-view__days__day--weekend {
-  color: #d10000;
+  color: black;
 }
 .react-calendar__month-view__days__day--neighboringMonth {
   color: #757575;
@@ -81,9 +85,11 @@
   padding: 2em 0.5em;
 }
 .react-calendar__tile {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   max-width: 100%;
   text-align: center;
-  padding: 0.75em 0.5em;
+  padding: 1.6em 0.5em;
+
   background: none;
 }
 .react-calendar__tile:disabled {
@@ -94,29 +100,47 @@
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:enabled:focus {
   background-color: #e6e6e6;
+  border-radius: 50%;
 }
 .react-calendar__tile--now {
-  background: #ffff76;
+  background: rgb(206, 215, 223);
+  border-radius: 50%;
 }
 .react-calendar__tile--now:enabled:hover,
 .react-calendar__tile--now:enabled:focus {
-  background: #ffffa9;
+  background: black;
+  color: white;
 }
 .react-calendar__tile--hasActive {
   background: #76baff;
 }
 .react-calendar__tile--hasActive:enabled:hover,
 .react-calendar__tile--hasActive:enabled:focus {
-  background: #a9d4ff;
+  background: #b3b0b0;
+  border-radius: 50%;
 }
 .react-calendar__tile--active {
-  background: #006edc;
+  background: black;
   color: white;
+  border-radius: 50%;
+  position: relative; /* Add this to make the pseudo-element relative to this element */
+
+  /* Add a 3px black solid border using a pseudo-element */
 }
+
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
-  background: #1087ff;
+  background: #757575;
+  border-radius: 50%;
 }
 .react-calendar--selectRange .react-calendar__tile--hover {
-  background-color: #e6e6e6;
+  background-color: #b3b0b0;
+  border-radius: 50%;
+}
+
+.calendar-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* This will set the aspect ratio to 1:1 (square) */
+  /* Alternatively, you can set the padding-bottom to a percentage that represents the desired aspect ratio */
 }

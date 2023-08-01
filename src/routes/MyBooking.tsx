@@ -24,6 +24,15 @@ export default function MyBooking() {
     return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
   });
 
+  // Separate the data into current/upcoming bookings and outdated bookings
+  const currentDate = new Date().getTime();
+  const currentBookings = sortedData?.filter(
+    (booking) => new Date(booking.check_out).getTime() >= currentDate
+  );
+  const outdatedBookings = sortedData?.filter(
+    (booking) => new Date(booking.check_out).getTime() < currentDate
+  );
+
   return (
     <Box>
       <Box
@@ -56,6 +65,14 @@ export default function MyBooking() {
           Sort By Last Date
         </Button>
       </Box>
+      <Text
+        marginTop={10}
+        marginLeft={"10%"}
+        fontWeight={"500"}
+        fontSize={"30px"}
+      >
+        Current Bookings
+      </Text>
       <Grid
         mt={20}
         px={{
@@ -68,7 +85,7 @@ export default function MyBooking() {
           lg: "1fr 1fr",
         }}
       >
-        {sortedData?.map((bookingSitter) => (
+        {currentBookings?.map((bookingSitter) => (
           <BookingSitter
             sitterPk={bookingSitter.sitter?.pk}
             pk={bookingSitter.pk}
@@ -82,6 +99,46 @@ export default function MyBooking() {
           />
         ))}
       </Grid>
+      {outdatedBookings && outdatedBookings.length > 0 && (
+        <>
+          <Heading
+            marginTop={20}
+            marginBottom={10}
+            marginLeft={"10%"}
+            fontWeight={"500"}
+            fontSize={"30px"}
+          >
+            Outdated Bookings
+          </Heading>
+          <Grid
+            mt={2}
+            marginBottom={10}
+            px={{
+              base: 10,
+              lg: 20,
+            }}
+            templateColumns={{
+              sm: "1fr",
+              md: "1fr",
+              lg: "1fr 1fr",
+            }}
+          >
+            {outdatedBookings.map((bookingSitter) => (
+              <BookingSitter
+                sitterPk={bookingSitter.sitter?.pk}
+                pk={bookingSitter.pk}
+                imageUrl={bookingSitter.sitter.photos[0]?.file}
+                name={bookingSitter.sitter.name}
+                city={bookingSitter.sitter.city}
+                country={bookingSitter.sitter.country}
+                check_in={bookingSitter.check_in}
+                check_out={bookingSitter.check_out}
+                pets={bookingSitter.pets}
+              />
+            ))}
+          </Grid>
+        </>
+      )}
     </Box>
   );
 }

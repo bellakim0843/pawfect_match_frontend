@@ -78,24 +78,21 @@ export interface ISitterBookingList {
   check_out: string;
   pets: number;
   user: ISitterAccount;
+  owner: IOwner;
   pet: IPet;
-}
-
-export interface IPet extends IOwner {
-  pk: number;
-  petname: string;
-  sex: string;
-  age: number;
-  weight: number;
-  breed: string;
-  neutering: boolean;
-  description: string;
 }
 
 export interface IOwner extends IUser {
   id: number;
   name: string;
-  gender: string[];
-  pet: IPet;
+  gender: string;
   account: IUser;
+  pet_name: string;
+  pet_gender: string;
+  pet_age: number;
+  pet_weight: number;
+  pet_breed: string;
+  neutering: boolean;
+  pet_description: string;
+  account: number;
 }

@@ -2,11 +2,55 @@ import { QueryFunctionContext, QueryKey } from "@tanstack/react-query";
 import Cookie from "js-cookie";
 import axios from "axios";
 import { formatDate } from "./lib/utils";
-import { IOwner, IPet } from "./types";
+import { IOwner, IUser } from "./types";
 const instance = axios.create({
   baseURL: "http://127.0.0.1:8000/",
   withCredentials: true,
 });
+
+export interface IUploadSitterVariables {
+  pk: number;
+  name: string;
+  country: string;
+  city: string;
+  address: string;
+  price: number;
+  description: string;
+  services: number[];
+  category: number[];
+}
+
+export const uploadSitter = (variables: IUploadSitterVariables) =>
+  instance
+    .post(`sitters/`, variables, {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || "",
+      },
+    })
+    .then((response) => response.data);
+
+export interface IUpdateSitterVariables {
+  sitterPk: string;
+  name: string;
+  country: string;
+  city: string;
+  address: string;
+  price: number;
+  description: string;
+  services: number[];
+  category: number[];
+}
+
+export const updateSitter = (variables: IUpdateSitterVariables) =>
+  instance
+    .put(`sitters/${variables.sitterPk}`, variables, {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || "",
+      },
+    })
+    .then((response) => response.data);
+
+type CheckBookingQueryKey = [string, string?, Date[]?];
 
 export const getSitters = () =>
   instance.get("sitters/").then((response) => response.data);
@@ -23,6 +67,29 @@ export const getSitterReviews = ({ queryKey }: QueryFunctionContext) => {
     .then((response) => response.data);
 };
 
+export interface IUploadOwnerVariables {
+  id: number;
+  name: string;
+  gender: string;
+  account: IUser;
+  pet_name: string;
+  pet_gender: string;
+  pet_age: number;
+  pet_weight: number;
+  pet_breed: string;
+  neutering: boolean;
+  pet_description: string;
+}
+
+export const uploadOwner = (variables: IUploadOwnerVariables) =>
+  instance
+    .post(`owners/`, variables, {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || "",
+      },
+    })
+    .then((response) => response.data);
+
 export const getOwners = () =>
   instance.get("owners/").then((response) => response.data);
 
@@ -31,11 +98,20 @@ export const getOwner = ({ queryKey }: QueryFunctionContext) => {
   return instance.get(`owners/${ownerPk}`).then((response) => response.data);
 };
 
+export const getOwnerMe = () =>
+  instance.get(`owners/me`).then((response) => response.data);
+
 export interface IUpdateOwnerVariables {
   ownerPk: string;
   name: string;
   gender: string;
-  Pet: IPet;
+  pet_name: string;
+  pet_gender: string;
+  pet_age: number;
+  pet_weight: number;
+  pet_breed: string;
+  neutering: boolean;
+  pet_description: string;
 }
 
 export const updateOwner = (variables: IUpdateOwnerVariables) =>
@@ -58,19 +134,6 @@ export const logOut = () =>
       },
     })
     .then((response) => response.data);
-
-export const githubLogIn = (code: string) =>
-  instance
-    .post(
-      `/users/github`,
-      { code },
-      {
-        headers: {
-          "X-CSRFToken": Cookie.get("csrftoken") || "",
-        },
-      }
-    )
-    .then((response) => response.status);
 
 export const getServices = () =>
   instance.get(`sitters/services/`).then((response) => response.data);
@@ -103,27 +166,6 @@ export const usernameLogIn = ({
     }
   );
 
-export interface IUploadSitterVariables {
-  pk: number;
-  name: string;
-  country: string;
-  city: string;
-  address: string;
-  price: number;
-  description: string;
-  services: number[];
-  category: number[];
-}
-
-export const uploadSitter = (variables: IUploadSitterVariables) =>
-  instance
-    .post(`sitters/`, variables, {
-      headers: {
-        "X-CSRFToken": Cookie.get("csrftoken") || "",
-      },
-    })
-    .then((response) => response.data);
-
 interface ISignUpVariables {
   name: string;
   email: string;
@@ -141,29 +183,6 @@ export const SignUp = ({ username, password, email, name }: ISignUpVariables) =>
       }
     )
     .then((response) => response.data);
-
-export interface IUpdateSitterVariables {
-  sitterPk: string;
-  name: string;
-  country: string;
-  city: string;
-  address: string;
-  price: number;
-  description: string;
-  services: number[];
-  category: number[];
-}
-
-export const updateSitter = (variables: IUpdateSitterVariables) =>
-  instance
-    .put(`sitters/${variables.sitterPk}`, variables, {
-      headers: {
-        "X-CSRFToken": Cookie.get("csrftoken") || "",
-      },
-    })
-    .then((response) => response.data);
-
-type CheckBookingQueryKey = [string, string?, Date[]?];
 
 export const checkBooking = ({
   queryKey,
@@ -224,74 +243,3 @@ export const getSitterBookings = ({ queryKey }: QueryFunctionContext) => {
     .get(`sitters/${sitterPk}/bookings`)
     .then((response) => response.data);
 };
-
-export interface IUploadOwnerVariables {
-  id: number;
-  name: string;
-  gender: string;
-  account: string[];
-}
-
-export const uploadOwner = (variables: IUploadOwnerVariables) =>
-  instance
-    .post(`owners/`, variables, {
-      headers: {
-        "X-CSRFToken": Cookie.get("csrftoken") || "",
-      },
-    })
-    .then((response) => response.data);
-
-export interface IUpdateOwnerVariables {
-  id: number;
-  name: string;
-  gender: string;
-  account: string[];
-}
-
-export interface IUploadPetVariables {
-  petname: string;
-  sex: string;
-  age: number;
-  weight: number;
-  breed: string;
-  neutering: boolean;
-  description: string;
-}
-
-export const getPets = () =>
-  instance.get("pets/").then((response) => response.data);
-
-export const getPet = ({ queryKey }: QueryFunctionContext) => {
-  const [, petPk] = queryKey;
-  return instance.get(`pets/${petPk}`).then((response) => response.data);
-};
-
-export const uploadPet = (variables: IUploadPetVariables) =>
-  instance
-    .post(`pets/`, variables, {
-      headers: {
-        "X-CSRFToken": Cookie.get("csrftoken") || "",
-      },
-    })
-    .then((response) => response.data);
-
-export interface IUpdatePetVariables {
-  petPk: number;
-  petname: string;
-  sex: string;
-  age: number;
-  weight: number;
-  breed: string;
-  neutering: boolean;
-  description: string;
-  account: IOwner;
-}
-
-export const updatePet = (variables: IUpdatePetVariables) =>
-  instance
-    .put(`pets/${variables.petPk}`, variables, {
-      headers: {
-        "X-CSRFToken": Cookie.get("csrftoken") || "",
-      },
-    })
-    .then((response) => response.data);

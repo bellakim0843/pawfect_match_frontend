@@ -14,8 +14,6 @@ import SitterEdit from "./routes/SitterEdit";
 import MyBooking from "./routes/MyBooking";
 import SitterBookings from "./routes/SitterBookings";
 import OwnerDetail from "./routes/OwnerDetail";
-import UploadPet from "./routes/UploadPet";
-import PetDetail from "./routes/PetDetail";
 
 const router = createBrowserRouter([
   {
@@ -58,14 +56,6 @@ const router = createBrowserRouter([
       {
         path: "owners/upload",
         element: <UploadOwner />,
-      },
-      {
-        path: "pets/:petPk",
-        element: <PetDetail />,
-      },
-      {
-        path: "pets/upload",
-        element: <UploadPet />,
       },
     ],
   },

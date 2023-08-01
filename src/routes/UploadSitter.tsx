@@ -137,7 +137,13 @@ export default function UploadSitter() {
             </FormControl>
             <FormControl>
               <FormLabel>Description</FormLabel>
-              <Textarea />
+              <InputGroup>
+                <Input
+                  {...register("description", { required: true })}
+                  type="text"
+                  min={0}
+                />
+              </InputGroup>
             </FormControl>
             <FormControl>
               <FormLabel>Category</FormLabel>
@@ -182,7 +188,7 @@ export default function UploadSitter() {
               size="lg"
               w="100%"
             >
-              Upload Room
+              Upload My Sitter Profile
             </Button>
           </VStack>
         </Container>
