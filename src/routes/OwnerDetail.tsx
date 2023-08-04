@@ -176,7 +176,7 @@ export default function OwnerDetail() {
             <FormControl>
               <FormLabel>Neutering</FormLabel>
               <Checkbox
-                {...register("neutering", { required: true })}
+                {...register("neutering")}
                 defaultChecked={updateOwnerData?.neutering}
               ></Checkbox>
               <FormHelperText>Check if your pet has neutered.</FormHelperText>

@@ -10,6 +10,7 @@ import {
   Button,
   Grid,
   HStack,
+  Heading,
   Text,
   VStack,
   useDisclosure,
@@ -39,12 +40,22 @@ export default function SitterBookings() {
     };
 
     return (
-      <Grid gap={10} templateColumns={{ sm: "1fr", md: "1fr 1fr" }}>
+      <Grid
+        gap={10}
+        templateColumns={{
+          sm: "1fr",
+          md: "1fr",
+          lg: "1fr 1fr",
+          xl: "1fr 1fr 1fr",
+        }}
+      >
         {data?.map((sitterBooking, index) => (
           <VStack key={sitterBooking.pk} spacing={4}>
             <Button
               onClick={() => handleButtonClick(index)} // Pass the index to the click handler
               width={"100%"}
+              minWidth={"500px"}
+              maxWidth={"500px"}
               height={"160px"}
               borderRadius={"xl"}
             >
@@ -77,7 +88,8 @@ export default function SitterBookings() {
                 bg="orange.100"
                 rounded="xl"
                 shadow="md"
-                width={"100vh"}
+                minWidth={"490px"}
+                maxWidth={"490px"}
               >
                 <Text
                   display={"block"}
@@ -133,6 +145,7 @@ export default function SitterBookings() {
   return (
     <ProtectedPage>
       <Box pb={40} margin={10}>
+        <Heading marginBottom={10}>Booking List</Heading>
         <CollapseEx />
       </Box>
     </ProtectedPage>

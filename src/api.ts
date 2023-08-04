@@ -171,13 +171,20 @@ interface ISignUpVariables {
   email: string;
   username: string;
   password: string;
+  is_sitter: boolean;
 }
 
-export const SignUp = ({ username, password, email, name }: ISignUpVariables) =>
+export const SignUp = ({
+  username,
+  password,
+  email,
+  name,
+  is_sitter,
+}: ISignUpVariables) =>
   instance
     .post(
       `users/`,
-      { username, password, email, name },
+      { username, password, email, name, is_sitter },
       {
         headers: { "X-CSRFToken": Cookie.get("csrftoken") || "" },
       }
@@ -243,3 +250,52 @@ export const getSitterBookings = ({ queryKey }: QueryFunctionContext) => {
     .get(`sitters/${sitterPk}/bookings`)
     .then((response) => response.data);
 };
+
+export const getUploadURL = () =>
+  instance
+    .post(`photos/get-url`, null, {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || "",
+      },
+    })
+    .then((response) => response.data);
+
+export interface IUploadImageVarialbes {
+  file: FileList;
+  uploadURL: string;
+}
+
+export const uploadImage = ({ file, uploadURL }: IUploadImageVarialbes) => {
+  const form = new FormData();
+  form.append("file", file[0]);
+  return axios
+    .post(uploadURL, form, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => response.data);
+};
+
+export interface ICreatePhotoVariables {
+  description: string;
+  file: string;
+  sitterPk: string;
+}
+
+export const createPhoto = ({
+  description,
+  file,
+  sitterPk,
+}: ICreatePhotoVariables) =>
+  instance
+    .post(
+      `sitters/${sitterPk}/photos`,
+      { description, file },
+      {
+        headers: {
+          "X-CSRFToken": Cookie.get("csrftoken") || "",
+        },
+      }
+    )
+    .then((response) => response.data);

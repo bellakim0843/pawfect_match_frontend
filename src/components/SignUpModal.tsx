@@ -15,6 +15,8 @@ import {
   useToast,
   FormControl,
   FormErrorMessage,
+  Checkbox,
+  FormLabel,
 } from "@chakra-ui/react";
 import { FaUserNinja, FaLock, FaEnvelope, FaUserSecret } from "react-icons/fa";
 import SocialLogin from "./SocialLogin";
@@ -27,6 +29,7 @@ interface IForm {
   email: string;
   username: string;
   password: string;
+  is_sitter: boolean;
 }
 
 interface SignUpModalProps {
@@ -53,12 +56,13 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
     },
   });
 
-  const onSubmit = ({ username, password, name, email }: IForm) => {
+  const onSubmit = ({ username, password, name, email, is_sitter }: IForm) => {
     mutation.mutate({
       username,
       email,
       name,
       password,
+      is_sitter,
     });
   };
   return (
@@ -134,6 +138,10 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                 variant="filled"
                 type="password"
               />
+            </InputGroup>
+            <InputGroup marginTop={5}>
+              <FormLabel>If you are a sitter, please check this.</FormLabel>
+              <Checkbox {...register("is_sitter")} />
             </InputGroup>
           </VStack>
           <Button

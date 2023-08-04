@@ -69,7 +69,7 @@ export default function UploadOwner() {
         }}
       >
         <Container>
-          <Heading textAlign={"center"}>Upload Account's information</Heading>
+          <Heading textAlign={"center"}>Upload Owner's information</Heading>
           <VStack
             spacing={10}
             as="form"
@@ -145,7 +145,7 @@ export default function UploadOwner() {
             </FormControl>
             <FormControl>
               <FormLabel>Neutering</FormLabel>
-              <Checkbox {...register("neutering", { required: true })} />
+              <Checkbox {...register("neutering")} />
               <FormHelperText>Check if your pet has neutered.</FormHelperText>
             </FormControl>
             <FormControl>

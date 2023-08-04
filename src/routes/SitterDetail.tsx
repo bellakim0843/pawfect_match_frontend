@@ -50,8 +50,7 @@ import { formatDate } from "../lib/utils";
 
 export default function SitterDetail() {
   const { register, handleSubmit } = useForm<ISitterBookingVariables>();
-  const { sitterPk } = useParams();
-  const { userPk } = useParams();
+  const { sitterPk, userPk } = useParams();
   const { data: userData } = useQuery<IUser>([`users`, userPk], getMe);
   // console.log(userData);
   const { isLoading: isSitterLoading, data: sitterData } =

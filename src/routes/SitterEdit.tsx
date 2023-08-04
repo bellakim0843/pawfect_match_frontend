@@ -193,7 +193,7 @@ export default function SitterEdit() {
                 size="lg"
                 w="100%"
               >
-                Upload Room
+                Upload Sitter Information
               </Button>
             </VStack>
           </Container>
