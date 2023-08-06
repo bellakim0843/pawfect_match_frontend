@@ -36,6 +36,7 @@ import {
   ISitterBookingVariables,
   checkBooking,
   getMe,
+  getOwner,
   getSitter,
   getSitterReviews,
   sitterBooking,
@@ -50,9 +51,12 @@ import { formatDate } from "../lib/utils";
 
 export default function SitterDetail() {
   const { register, handleSubmit } = useForm<ISitterBookingVariables>();
-  const { sitterPk, userPk } = useParams();
+  const { sitterPk } = useParams();
+  const { userPk } = useParams();
+  const { ownerPk } = useParams();
+
   const { data: userData } = useQuery<IUser>([`users`, userPk], getMe);
-  // console.log(userData);
+
   const { isLoading: isSitterLoading, data: sitterData } =
     useQuery<ISitterDetail>([`sitters`, sitterPk], getSitter);
   console.log(`/sitters/${sitterData?.id}`);
@@ -70,6 +74,7 @@ export default function SitterDetail() {
       enabled: dates !== undefined,
     }
   );
+
   const navigate = useNavigate();
   const onEditClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
     event.preventDefault(); // click이 링크로 전파되는것을 방지(버블링 방지)한다.
@@ -216,7 +221,7 @@ export default function SitterDetail() {
                 >
                   <HStack marginTop={4} alignItems={"flex-start"} w="100%">
                     <Text fontSize={"20px"} fontWeight={"bold"}>
-                      {sitterData?.price} {sitterData?.city},{" "}
+                      €{sitterData?.price} {sitterData?.city},{" "}
                       {sitterData?.country}
                     </Text>
                   </HStack>
@@ -307,7 +312,7 @@ export default function SitterDetail() {
                 paddingX={4}
                 paddingY={6}
                 borderRadius="xl"
-                minWidth={"570px"}
+                minWidth={"500px"}
               >
                 <Calendar
                   goToRangeStartOnSelect
@@ -347,14 +352,14 @@ export default function SitterDetail() {
                     isDisabled={!checkBookingData?.ok}
                     isLoading={isCheckingBooking && dates !== undefined}
                     w={"70%"}
-                    colorScheme={"red"}
+                    colorScheme={"orange"}
                     marginLeft={"16%"}
                   >
-                    Make Booking
+                    Book this Sitter
                   </Button>
                   {!isCheckingBooking && !checkBookingData?.ok ? (
                     <Text color="red.500">
-                      Can't book on those dates, sorry.
+                      This sitter is unavailable on those dates.
                     </Text>
                   ) : null}
                 </Grid>

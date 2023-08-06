@@ -97,7 +97,7 @@ export default function SitterBookings() {
                   fontSize="lg"
                   marginBottom={1}
                 >
-                  Pet name: {sitterBooking.owner.pet_name}
+                  Pet name: {sitterBooking.user.pet_name}
                 </Text>
                 <Text
                   display={"block"}
@@ -105,7 +105,7 @@ export default function SitterBookings() {
                   fontSize="lg"
                   marginBottom={1}
                 >
-                  Pet age: {sitterBooking.owner.pet_age}
+                  Pet age: {sitterBooking.user.pet_age}
                 </Text>
                 <Text
                   display={"block"}
@@ -113,7 +113,7 @@ export default function SitterBookings() {
                   fontSize="lg"
                   marginBottom={1}
                 >
-                  Pet gender: {sitterBooking.owner.pet_gender}
+                  Pet gender: {sitterBooking.user.pet_gender}
                 </Text>
                 <Text
                   display={"block"}
@@ -121,7 +121,7 @@ export default function SitterBookings() {
                   fontSize="lg"
                   marginBottom={1}
                 >
-                  Pet Weight: {sitterBooking.owner.pet_weight}
+                  Pet Weight: {sitterBooking.user.pet_weight}
                 </Text>
                 <Text
                   display={"block"}
@@ -129,10 +129,11 @@ export default function SitterBookings() {
                   fontSize="lg"
                   marginBottom={1}
                 >
-                  Pet Breed: {sitterBooking.owner.pet_breed}
+                  Pet Breed: {sitterBooking.user.pet_breed}
                 </Text>
+
                 <Text display={"block"} noOfLines={5} fontSize="lg">
-                  Pet Description: {sitterBooking.owner.pet_description}
+                  Pet Description: {sitterBooking.user.pet_description}
                 </Text>
               </Box>
             </Collapse>

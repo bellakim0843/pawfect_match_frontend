@@ -2,7 +2,7 @@ import { QueryFunctionContext, QueryKey } from "@tanstack/react-query";
 import Cookie from "js-cookie";
 import axios from "axios";
 import { formatDate } from "./lib/utils";
-import { IOwner, IUser } from "./types";
+import { IUser } from "./types";
 const instance = axios.create({
   baseURL: "http://127.0.0.1:8000/",
   withCredentials: true,
@@ -69,8 +69,6 @@ export const getSitterReviews = ({ queryKey }: QueryFunctionContext) => {
 
 export interface IUploadOwnerVariables {
   id: number;
-  name: string;
-  gender: string;
   account: IUser;
   pet_name: string;
   pet_gender: string;
@@ -83,7 +81,7 @@ export interface IUploadOwnerVariables {
 
 export const uploadOwner = (variables: IUploadOwnerVariables) =>
   instance
-    .post(`owners/`, variables, {
+    .post(`users/`, variables, {
       headers: {
         "X-CSRFToken": Cookie.get("csrftoken") || "",
       },
@@ -91,20 +89,18 @@ export const uploadOwner = (variables: IUploadOwnerVariables) =>
     .then((response) => response.data);
 
 export const getOwners = () =>
-  instance.get("owners/").then((response) => response.data);
+  instance.get("users/").then((response) => response.data);
 
 export const getOwner = ({ queryKey }: QueryFunctionContext) => {
   const [, ownerPk] = queryKey;
-  return instance.get(`owners/${ownerPk}`).then((response) => response.data);
+  return instance.get(`users/${ownerPk}`).then((response) => response.data);
 };
 
 export const getOwnerMe = () =>
-  instance.get(`owners/me`).then((response) => response.data);
+  instance.get(`users/me`).then((response) => response.data);
 
 export interface IUpdateOwnerVariables {
   ownerPk: string;
-  name: string;
-  gender: string;
   pet_name: string;
   pet_gender: string;
   pet_age: number;
@@ -116,7 +112,7 @@ export interface IUpdateOwnerVariables {
 
 export const updateOwner = (variables: IUpdateOwnerVariables) =>
   instance
-    .put(`owners/${variables.ownerPk}`, variables, {
+    .put(`users/${variables.ownerPk}`, variables, {
       headers: {
         "X-CSRFToken": Cookie.get("csrftoken") || "",
       },

@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { IOwner, IUser } from "../types";
+import { IUser } from "../types";
 import useHostOnlyPage from "../components/HostOnlyPage";
 import {
   IUpdateOwnerVariables,
@@ -30,34 +30,31 @@ import React from "react";
 
 export default function OwnerDetail() {
   const { ownerPk } = useParams();
-  const { userPk } = useParams();
-  const { data: userData } = useQuery<IUser>([`users`, userPk], getOwners);
+  // const { userPk } = useParams();
+  // const { data: userData } = useQuery<IUser>([`users`, userPk], getOwners);
 
-  const { data: ownerData, isLoading: isOwnerDataLoading } = useQuery<IOwner>(
+  const { data: ownerData, isLoading: isOwnerDataLoading } = useQuery<IUser>(
     ["owners", "me"],
     getMe
   );
-
   const { register, handleSubmit, setValue } = useForm<IUpdateOwnerVariables>();
   const toast = useToast();
   const navigate = useNavigate();
   const updateOwnerMutation = useMutation(updateOwner, {
-    onSuccess: (data: IOwner) => {
+    onSuccess: (data: IUser) => {
       toast({
         title: "My Profile update complete!",
         status: "success",
         position: "bottom-right",
       });
-
-      navigate(`/owners/${ownerData?.id}`);
+      console.log(`/users/${ownerData?.pk}`);
+      navigate(`/users/me`);
     },
   });
   const { data: updateOwnerData, isLoading: isUpdateOwnerDataLoading } =
-    useQuery<IOwner>(["owners", ownerPk], getOwnerMe);
+    useQuery<IUpdateOwnerVariables>(["users", ownerPk], getMe);
   React.useEffect(() => {
     if (!isUpdateOwnerDataLoading && updateOwnerData) {
-      setValue("name", updateOwnerData.name);
-      setValue("gender", updateOwnerData.gender);
       setValue("pet_name", updateOwnerData.pet_name);
       setValue("pet_gender", updateOwnerData.pet_gender);
       setValue("pet_age", updateOwnerData.pet_age);
@@ -76,7 +73,7 @@ export default function OwnerDetail() {
         await updateOwnerMutation.mutateAsync(data);
 
         // Redirect to the updated owner's profile page
-        navigate(`/owners/me`);
+        navigate(`/users/me`);
       } catch (error) {
         // Handle the error if the update request fails
         toast({
@@ -101,27 +98,6 @@ export default function OwnerDetail() {
             mt={5}
             onSubmit={handleSubmit(onSubmit)}
           >
-            <FormControl>
-              <FormLabel>Name</FormLabel>
-              <Input
-                {...register("name", { required: true })}
-                defaultValue={updateOwnerData?.name}
-                required
-                type="text"
-              />
-              <FormHelperText>Write your name</FormHelperText>
-            </FormControl>
-            <FormControl>
-              <FormLabel>Category</FormLabel>
-              <Select
-                {...register("gender", { required: true })}
-                placeholder="Choose your gender"
-                defaultValue={updateOwnerData?.gender}
-              >
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </Select>
-            </FormControl>
             <FormControl>
               <FormLabel>Pet Name</FormLabel>
               <Input

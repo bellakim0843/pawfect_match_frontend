@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import {
   Box,
   Button,
+  Divider,
+  HStack,
   Input,
   InputGroup,
   InputLeftElement,
@@ -25,6 +27,7 @@ import {
   IUsernameLoginVariables,
   usernameLogIn,
 } from "../api";
+import { Link } from "react-router-dom";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -56,6 +59,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       });
       onClose();
       queryClient.refetchQueries(["me"]);
+      window.location.reload();
       reset();
     },
   });
@@ -115,12 +119,24 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             isLoading={mutation.isLoading}
             type="submit"
             mt={4}
-            colorScheme={"red"}
+            colorScheme={"orange"}
             w="100%"
+            marginBottom={5}
           >
             Log in
           </Button>
-          <SocialLogin />
+          {/* <HStack my={8}>
+            <Divider />
+            <Text
+              textTransform={"uppercase"}
+              color="gray.500"
+              fontSize={"xs"}
+              as="b"
+            >
+              Or
+            </Text>
+            <Divider />
+          </HStack> */}
         </ModalBody>
       </ModalContent>
     </Modal>

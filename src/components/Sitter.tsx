@@ -76,19 +76,7 @@ export default function Sitter({
             >
               <FaCamera size={"20px"} />
             </Button>
-          ) : (
-            <Box
-              as={Button}
-              variant={"unstyled"}
-              position={"absolute"}
-              top={0}
-              right={0}
-              color={"white"}
-              _hover={{ color: "red" }} // Add hover styles to the Box component
-            >
-              <FaRegHeart size={"20px"} />
-            </Box>
-          )}
+          ) : null}
         </Box>
         <Box>
           <Grid gap={2} templateColumns={"4.5fr 1fr"}>

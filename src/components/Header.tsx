@@ -25,7 +25,7 @@ import useUser from "../lib/useUser";
 import { getMe, getOwner, getOwnerMe, getOwners, logOut } from "../api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
-import { IOwner, IUser } from "../types";
+import { IUser } from "../types";
 
 export default function Header() {
   const { userLoading, isLoggedIn, user } = useUser();
@@ -72,15 +72,16 @@ export default function Header() {
   };
   const { ownerPk } = useParams();
   const { userPk } = useParams();
-  const { data: userData } = useQuery<IOwner>([`owners`, ownerPk], getOwnerMe);
-  const { isLoading: isOwnerLoading, data: ownerData } = useQuery<IOwner>(
-    [`owners`, ownerPk],
+  const { data: userData } = useQuery<IUser>([`users`, ownerPk], getMe);
+  const { isLoading: isOwnerLoading, data: ownerData } = useQuery<IUser>(
+    [`users`, ownerPk],
     getOwner
   );
   const navigate = useNavigate();
   const onEditClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
     event.preventDefault(); // click이 링크로 전파되는것을 방지(버블링 방지)한다.
-    navigate(`/owners/${ownerData?.id}`);
+    // navigate(`/users/${ownerData?.pk}`);
+    navigate(`/users/me`);
   };
   return (
     <Box width={"100%"}>

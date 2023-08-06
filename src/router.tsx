@@ -50,11 +50,11 @@ const router = createBrowserRouter([
         element: <UploadPhotos />,
       },
       {
-        path: "owners/:ownerPk",
+        path: "users/:ownerPk",
         element: <OwnerDetail />,
       },
       {
-        path: "owners/upload",
+        path: "users/upload",
         element: <UploadOwner />,
       },
     ],

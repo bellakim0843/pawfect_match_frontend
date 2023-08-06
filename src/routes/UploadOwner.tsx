@@ -35,7 +35,7 @@ import {
   IUploadOwnerVariables,
   uploadOwner,
 } from "../api";
-import { IService, ICategory, IUser, IOwner } from "../types";
+import { IService, ICategory, IUser } from "../types";
 import { useNavigate } from "react-router-dom";
 
 export default function UploadOwner() {
@@ -43,14 +43,14 @@ export default function UploadOwner() {
   const toast = useToast();
   const navigate = useNavigate();
   const mutation = useMutation(uploadOwner, {
-    onSuccess: (ownerData: IOwner) => {
+    onSuccess: (ownerData: IUser) => {
       toast({
         status: "success",
         title: "User's Pet information created",
         position: "bottom-right",
       });
       console.log(ownerData);
-      navigate(`/owners/${ownerData.id}`);
+      navigate(`/users/${ownerData.pk}`);
     },
   });
 
@@ -76,26 +76,6 @@ export default function UploadOwner() {
             onSubmit={handleSubmit(onSubmit)}
             mt={5}
           >
-            <FormControl>
-              <FormLabel>Name</FormLabel>
-              <Input
-                {...register("name", { required: true })}
-                required
-                type="text"
-              />
-              <FormHelperText>Write your pet's name.</FormHelperText>
-            </FormControl>
-            <FormControl>
-              <FormLabel>Gender</FormLabel>
-              <Select
-                {...register("gender", { required: true })}
-                required
-                defaultValue="" // Set the default value to an empty string to prompt the user to select an option
-              >
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </Select>
-            </FormControl>
             <FormControl>
               <FormLabel>Pet Name</FormLabel>
               <Input

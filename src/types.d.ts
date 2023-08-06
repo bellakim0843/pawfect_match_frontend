@@ -56,6 +56,13 @@ export interface IUser {
   date_joined: string;
   avatar: string;
   is_sitter: boolean;
+  pet_name: string;
+  pet_gender: string;
+  pet_age: number;
+  pet_weight: number;
+  pet_breed: string;
+  neutering: boolean;
+  pet_description: string;
 }
 
 export interface IService {
@@ -70,23 +77,6 @@ export interface IUserBookingList {
   check_in: string;
   check_out: string;
   pets: number;
-}
-
-export interface ISitterBookingList {
-  pk: number;
-  check_in: string;
-  check_out: string;
-  pets: number;
-  user: ISitterAccount;
-  owner: IOwner;
-  pet: IPet;
-}
-
-export interface IOwner extends IUser {
-  id: number;
-  name: string;
-  gender: string;
-  account: IUser;
   pet_name: string;
   pet_gender: string;
   pet_age: number;
@@ -94,5 +84,12 @@ export interface IOwner extends IUser {
   pet_breed: string;
   neutering: boolean;
   pet_description: string;
-  account: number;
+}
+
+export interface ISitterBookingList {
+  pk: number;
+  check_in: string;
+  check_out: string;
+  pets: number;
+  user: IUser;
 }

@@ -18,7 +18,7 @@ import {
   getSitters,
   getUserBookings,
 } from "../api";
-import { IOwner, ISitterList, IUser } from "../types";
+import { ISitterList, IUser } from "../types";
 import {
   FaRegCheckCircle,
   FaDog,
@@ -30,10 +30,10 @@ import { color } from "framer-motion";
 
 export default function Home() {
   const { isLoading, data } = useQuery<ISitterList[]>(["sitters"], getSitters);
-  const { isLoading: isOwnerLoading, data: ownerData } = useQuery<IOwner[]>(
-    ["owners"],
-    getOwner
-  );
+  // const { isLoading: isOwnerLoading, data: ownerData } = useQuery<IOwner[]>(
+  //   ["owners"],
+  //   getOwner
+  // );
   const { data: userData } = useQuery<IUser[]>(["users"], getMe);
   console.log(userData);
 

@@ -18,7 +18,7 @@ import {
   Checkbox,
   FormLabel,
 } from "@chakra-ui/react";
-import { FaUserNinja, FaLock, FaEnvelope, FaUserSecret } from "react-icons/fa";
+import { FaLock, FaEnvelope, FaUser, FaRegIdCard } from "react-icons/fa";
 import SocialLogin from "./SocialLogin";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -77,7 +77,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
               <InputLeftElement
                 children={
                   <Box color="gray.500">
-                    <FaUserSecret />
+                    <FaRegIdCard />
                   </Box>
                 }
               />
@@ -114,7 +114,7 @@ export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
               <InputLeftElement
                 children={
                   <Box color="gray.500">
-                    <FaUserNinja />
+                    <FaUser />
                   </Box>
                 }
               />
